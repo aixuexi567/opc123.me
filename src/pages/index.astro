@@ -1,11 +1,21 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+// 1. 导入我们刚才写好的游戏组件
+import CatchBug from '../components/CatchBug.astro';
 ---
 
-<Layout>
-	<Welcome />
-</Layout>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>我的交互作品集</title>
+  </head>
+  <body style="font-family: sans-serif; background: #f4f4f5; padding: 2rem;">
+    
+    <h1 style="text-align: center;">欢迎来到我的数字花园 🌱</h1>
+    <p style="text-align: center; color: #666;">这里不仅有我的看法，还有我写的小玩意儿。</p>
+    
+    <!-- 2. 像使用普通 HTML 标签一样，把游戏放在这里！ -->
+    <CatchBug />
+
+  </body>
+</html>

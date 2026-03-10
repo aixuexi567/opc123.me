@@ -1,0 +1,129 @@
+---
+// 这里是 Astro 的服务端脚本区域（目前留空即可）
+---
+
+<div class="game-container">
+  <h3>👾 程序员解压小游戏：抓 Bug</h3>
+  <p>得分: <span id="score">0</span> | 剩余时间: <span id="time">15</span>s</p>
+  
+  <button id="start-btn">开始游戏</button>
+  
+  <div id="play-area">
+    <div id="bug">🐛</div>
+  </div>
+</div>
+
+<style>
+  /* 这里是专属这个组件的 CSS，Astro 会自动隔离，不会污染全局 */
+  .game-container {
+    max-width: 400px;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    background: #1e1e2e;
+    color: #cdd6f4;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  }
+  
+  button {
+    background: #a6e3a1;
+    color: #11111b;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    transition: transform 0.1s;
+  }
+  
+  button:active {
+    transform: scale(0.95);
+  }
+
+  #play-area {
+    width: 100%;
+    height: 250px;
+    background: #313244;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+    cursor: crosshair;
+  }
+
+  #bug {
+    font-size: 2rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none; /* 初始隐藏 */
+    cursor: pointer;
+    user-select: none;
+    transition: top 0.2s ease-out, left 0.2s ease-out;
+  }
+</style>
+
+<script>
+  // 这里是纯前端交互逻辑，Astro 会自动打包并运行在用户的浏览器里
+  const startBtn = document.getElementById('start-btn');
+  const bug = document.getElementById('bug');
+  const scoreDisplay = document.getElementById('score');
+  const timeDisplay = document.getElementById('time');
+  const playArea = document.getElementById('play-area');
+
+  let score = 0;
+  let timeLeft = 15;
+  let gameInterval;
+  let moveInterval;
+
+  // 随机移动 Bug 的函数
+  function moveBug() {
+    const maxX = playArea.clientWidth - 40;
+    const maxY = playArea.clientHeight - 40;
+    
+    const randomX = Math.floor(Math.random() * maxX);
+    const randomY = Math.floor(Math.random() * maxY);
+    
+    bug.style.left = `${randomX}px`;
+    bug.style.top = `${randomY}px`;
+  }
+
+  // 点击 Bug 得分
+  bug.addEventListener('click', (e) => {
+    score++;
+    scoreDisplay.innerText = score;
+    moveBug(); // 点中后立刻换位置
+  });
+
+  // 开始游戏逻辑
+  startBtn.addEventListener('click', () => {
+    score = 0;
+    timeLeft = 15;
+    scoreDisplay.innerText = score;
+    timeDisplay.innerText = timeLeft;
+    
+    startBtn.disabled = true;
+    bug.style.display = 'block';
+    moveBug();
+
+    // 倒计时
+    gameInterval = setInterval(() => {
+      timeLeft--;
+      timeDisplay.innerText = timeLeft;
+      
+      if (timeLeft <= 0) {
+        clearInterval(gameInterval);
+        clearInterval(moveInterval);
+        bug.style.display = 'none';
+        startBtn.disabled = false;
+        startBtn.innerText = "再玩一次";
+        alert(`游戏结束！你一共抓到了 ${score} 个 Bug！🎉`);
+      }
+    }, 1000);
+
+    // Bug 自动逃跑（每 800 毫秒移动一次）
+    moveInterval = setInterval(moveBug, 800);
+  });
+</script>

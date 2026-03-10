@@ -1,4 +1,4 @@
-# Astro Starter Kit: Basics
+# opc123.me - Personal Website
 
 ```sh
 npm create astro@latest -- --template basics
